@@ -3,7 +3,7 @@ var assert = require('assert'),
 
 module.exports = function(Bookshelf) {
 
-	xdescribe('Model Registry', function() {
+	describe('Model Registry', function() {
 
 		beforeEach(function() {
 			Bookshelf.models = {};

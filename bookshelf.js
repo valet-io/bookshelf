@@ -9,6 +9,7 @@
 // All external libraries needed in this scope.
 var _          = require('lodash');
 var Knex       = require('knex');
+var inflection = require('inflection');
 
 // All local dependencies... These are the main objects that
 // need to be augmented in the constructor to work properly.
@@ -96,6 +97,18 @@ _.extend(Bookshelf.prototype, Events, {
       plugin(this);
     }
     return this;
+  },
+
+  // Provides the ability to register models on the Bookshelf instance to
+  // avoid circular dependency issues
+
+  register: function(Model, name) {
+    if (!name) {
+      name = inflection.transform(Model.prototype.tableName, ['singularize', 'capitalize']);
+    }
+    this.models = this.models || {};
+    this.models[name] = Model;
+    return Model;
   }
 
 });
