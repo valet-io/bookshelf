@@ -305,6 +305,14 @@
       Initialize
     </a>
 
+    <a class="toc_title" href="#Managing-Models">
+      Managing Models
+    </a>
+    <ul class="toc_section">
+      <li>– <a href="#Managing-Models-register">register</a></li>
+      <li>– <a href="#Managing-Models-models">models</a></li>
+    </ul>
+
     <a class="toc_title" href="#Model">
       Model
     </a>
@@ -579,6 +587,53 @@ var Post = Bookshelf.Model.extend({
   // ...
 });
 </pre>
+
+    <h2 id="Managing-Models">Managing Models</h2>
+
+    <p>
+      When defining <a href="#Model-relation-types">relationships</a> between your models, you're probably going to run into issues with circular dependencies. Node returns unfinished <em>copies</em> of modules when you define circular dependencies. For example: 
+    </p>
+
+    <pre>
+    // file: a.js
+    var b = require('./b'); # => {}
+    module.exports = 'foo';
+
+    // file: b.js
+    var a = require('./a'); # => {}
+    module.exports = function() {
+      return 'bar';
+    };
+
+    //file: c.js
+    var b = require('./b');
+    b(); # => TypeError, a is not a function
+    </pre>
+
+    <p>
+     Because Node creates empty <em>copies</em> of modules to avoid infinite loops with circular dependencies, even <tt>c.js</tt> never gets the <tt>module.exports</tt> object of <tt>b.js</tt>. Circular dependencies are almost guaranteed if you're defining relationships between your model. To help get around this, Bookshelf lets you register your models in a central location so you can call them without dependency issues.
+    </p>
+
+    <p id="Managing-Models-register">
+      <b class="header">register</b><code>Bookshelf.register(Model, [name])</code>
+      <br />
+      If no name is provided, the singuar, capitalized version of the model's <tt>tableName</tt> will be used. For example, <tt>records</tt> would become <tt>Record</tt>. <tt>Bookshelf.register</tt> returns the Model that was passed to it.
+    </p>
+
+    <pre>
+    // instead of
+    module.exports = Customer;
+
+    // just do
+    module.exports = Bookshelf.register(Customer, 'Customer');
+    </pre>
+
+    <p id="Managing-Models-models">
+      <b class="header">models</b><code>Bookshelf.models</code>
+      <br />
+      Models stored with <tt>Bookshelf.register</tt> will be stored here, using the name. Using the above example, we can accessed the customer model using <tt>Bookshelf.models.Customer</tt>.
+    </p>
+
 
     <h2 id="Model">Bookshelf.Model</h2>
 
