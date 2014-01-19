@@ -591,7 +591,10 @@ var Post = Bookshelf.Model.extend({
     <h2 id="Managing-Models">Managing Models</h2>
 
     <p>
-      When defining <a href="#Model-relation-types">relationships</a> between your models, you're probably going to run into issues with circular dependencies. Node returns unfinished <em>copies</em> of modules when you define circular dependencies. For example: 
+      When defining <a href="#Model-relation-types">relationships</a>
+      between your models, you're probably going to run into issues with circular
+      dependencies. Node returns unfinished <em>copies</em> of modules when you
+      define circular dependencies. For example:
     </p>
 
     <pre>
@@ -611,13 +614,22 @@ var Post = Bookshelf.Model.extend({
     </pre>
 
     <p>
-     Because Node creates empty <em>copies</em> of modules to avoid infinite loops with circular dependencies, even <tt>c.js</tt> never gets the <tt>module.exports</tt> object of <tt>b.js</tt>. Circular dependencies are almost guaranteed if you're defining relationships between your model. To help get around this, Bookshelf lets you register your models in a central location so you can call them without dependency issues.
+      Because Node creates empty <em>copies</em> of modules to avoid
+      infinite loops with circular dependencies, even <tt>c.js</tt> never gets the
+      <tt>module.exports</tt> object of <tt>b.js</tt>. Circular dependencies are
+      almost guaranteed if you're defining relationships between your model. To help
+      get around this, Bookshelf lets you register your models in a central location
+      so you can call them without dependency issues.
     </p>
 
     <p id="Managing-Models-register">
       <b class="header">register</b><code>Bookshelf.register(Model, [name])</code>
       <br />
-      If no name is provided, the singuar, capitalized version of the model's <tt>tableName</tt> will be used. For example, <tt>records</tt> would become <tt>Record</tt>. <tt>Bookshelf.register</tt> returns the Model that was passed to it.
+
+      If no name is provided, the singuar, capitalized version of the model's
+      <tt>tableName</tt> will be used. For example, <tt>records</tt> would become
+      <tt>Record</tt>. <tt>Bookshelf.register</tt> returns the Model that was passed
+      to it.
     </p>
 
     <pre>
@@ -631,7 +643,8 @@ var Post = Bookshelf.Model.extend({
     <p id="Managing-Models-models">
       <b class="header">models</b><code>Bookshelf.models</code>
       <br />
-      Models stored with <tt>Bookshelf.register</tt> will be stored here, using the name. Using the above example, we can accessed the customer model using <tt>Bookshelf.models.Customer</tt>.
+
+      Models stored with <tt>Bookshelf.register</tt> will be stored here, using the name. Using the above example, we can access the customer model using <tt>Bookshelf.models.Customer</tt>.
     </p>
 
 
