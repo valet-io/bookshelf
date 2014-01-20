@@ -12,6 +12,11 @@ module.exports = function(Bookshelf) {
 			this.morphTo = sinon.spy(Bookshelf.Model.prototype, 'morphTo');
 		});
 
+		after(function() {
+			this.hasOne.restore();
+			this.morphTo.restore();
+		});
+
 		beforeEach(function() {
 			this.hasOne.reset();
 			this.morphTo.reset();
