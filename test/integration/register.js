@@ -6,7 +6,7 @@ module.exports = function(Bookshelf) {
 	describe('Model Registry', function() {
 
 		beforeEach(function() {
-			Bookshelf.models = {};
+			Bookshelf._models = {};
 		});
 
 		describe('Registering Models', function() {
@@ -16,23 +16,18 @@ module.exports = function(Bookshelf) {
 			});
 
 			it('returns the registered model', function() {
-				equal(Bookshelf.register(Model), Model);
+				equal(Bookshelf.model(Model), Model);
 			});
 
-			it('names the model using the capitalized and singularized tableName by default', function() {
-				Bookshelf.register(Model);
-				equal(Bookshelf.models.Record, Model);
-			});
-
-			it('can give the model a custom name', function() {
-				Bookshelf.register(Model, 'CustomName');
-				equal(Bookshelf.models.CustomName, Model);
+			it('gives the model a name', function() {
+				Bookshelf.model(Model, 'CustomName');
+				equal(Bookshelf.model('CustomName'), Model);
 			});
 
 			it('overwrites when there is a name conflict', function() {
-				Bookshelf.register(Model, 'Name');
-				Bookshelf.register(Bookshelf.Model, 'Name');
-				equal(Bookshelf.models.Name, Bookshelf.Model);
+				Bookshelf.model(Model, 'Name');
+				Bookshelf.model(Bookshelf.Model, 'Name');
+				equal(Bookshelf.model('Name'), Bookshelf.Model);
 			});
 
 		});
