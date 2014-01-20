@@ -5,52 +5,56 @@ module.exports = function(Bookshelf) {
 
 	describe('Model Registry', function() {
 
-		beforeEach(function() {
-			Bookshelf._models = {};
-		});
-
 		describe('Registering Models', function() {
+
+			beforeEach(function() {
+				Bookshelf._models = {};
+			});
 
 			var Model = Bookshelf.Model.extend({
 				tableName: 'records'
 			});
 
 			it('returns the registered model', function() {
-				equal(Bookshelf.model(Model), Model);
+				equal(Bookshelf.model('Model', Model), Model);
 			});
 
-			it('gives the model a name', function() {
-				Bookshelf.model(Model, 'CustomName');
-				equal(Bookshelf.model('CustomName'), Model);
+			it('assigns the model the name', function() {
+				Bookshelf.model('Model', Model);
+				equal(Bookshelf.model('Model'), Model);
 			});
 
 			it('overwrites when there is a name conflict', function() {
-				Bookshelf.model(Model, 'Name');
-				Bookshelf.model(Bookshelf.Model, 'Name');
-				equal(Bookshelf.model('Name'), Bookshelf.Model);
+				Bookshelf.model('Model', Model);
+				Bookshelf.model('Model', Bookshelf.Model);
+				equal(Bookshelf.model('Model'), Bookshelf.Model);
 			});
 
 		});
 
 		describe('Registering Collections', function() {
 
+			beforeEach(function() {
+				Bookshelf._collections = {};
+			});
+
 			var Collection = Bookshelf.Collection.extend({
 				property: {}
 			});
 
 			it('returns the registered collection', function() {
-				equal(Bookshelf.collection(Collection), Collection);
+				equal(Bookshelf.collection('Collection', Collection), Collection);
 			});
 
 			it('gives the collection a name', function() {
-				Bookshelf.collection(Collection, 'CollectionName');
-				equal(Bookshelf.collection('CollectionName'), Collection);
+				Bookshelf.collection('Collection', Collection);
+				equal(Bookshelf.collection('Collection'), Collection);
 			});
 
 			it('overwrites the collection when there is a name conflict', function() {
-				Bookshelf.collection(Collection, 'Name');
-				Bookshelf.collection(Bookshelf.Collection, 'Name');
-				equal(Bookshelf.collection('Name'), Bookshelf.Collection);
+				Bookshelf.collection('Collection', Collection);
+				Bookshelf.collection('Collection', Bookshelf.Collection);
+				equal(Bookshelf.collection('Collection'), Bookshelf.Collection);
 			});
 
 		});
