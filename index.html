@@ -305,14 +305,6 @@
       Initialize
     </a>
 
-    <a class="toc_title" href="#Registry">
-      Registry
-    </a>
-    <ul class="toc_section">
-      <li>– <a href="#Registry-model">model</a></li>
-      <li>– <a href="#Registry-collection">collection</a></li>
-    </ul>
-
     <a class="toc_title" href="#Model">
       Model
     </a>
@@ -407,6 +399,13 @@
     <ul class="toc_section">
       <li>– <a href="#Bookshelf-knex">Bookshelf.knex</a></li>
       <li>– <a href="#Bookshelf-transaction">Bookshelf.transaction</a></li>
+    </ul>
+
+    <a class="toc_title" href="#Plugins">
+      Plugins
+    </a>
+    <ul class="toc_section">
+      <li>– <a href="#Plugin-Registry">Registry</a></li>
     </ul>
 
     <a class="toc_title" href="#faq">
@@ -587,76 +586,6 @@ var Post = Bookshelf.Model.extend({
   // ...
 });
 </pre>
-
-    <h2 id="Registry">Registry</h2>
-
-    <p>
-      When defining <a href="#Model-relation-types">relationships</a>
-      between your models and collections, you're probably going to run into issues with circular
-      dependencies. Node returns unfinished <em>copies</em> of modules when you
-      define circular dependencies. For example:
-    </p>
-
-    <pre>
-    // file: a.js
-    var b = require('./b'); # => {}
-    module.exports = 'foo';
-
-    // file: b.js
-    var a = require('./a'); # => {}
-    module.exports = function() {
-      return 'bar';
-    };
-
-    //file: c.js
-    var b = require('./b');
-    b(); # => TypeError, a is not a function
-    </pre>
-
-    <p>
-    
-      Because Node creates empty <em>copies</em> of modules to avoid infinite
-      loops with circular dependencies, even <tt>c.js</tt> never gets the
-      <tt>module.exports</tt> object of <tt>b.js</tt>. Circular dependencies
-      are almost guaranteed if you're defining relationships between your
-      model. To help get around this, Bookshelf lets you register your models
-      and collections in a central location so you can call them without
-      dependency issues.
-
-    </p>
-
-    <p id="Registry-model">
-      <b class="header">model</b><code>Bookshelf.model(name, [Model])</code>
-      <br />
-
-      If a <tt>Model</tt> is supplied, Bookshelf will register it using the
-      <tt>name</tt>. Otherwise, Bookshelf will look for a previously registered model.
-
-    </p>
-
-    <pre>
-    var Customer = Bookshelf.Model.extend({
-      tableName: 'customers'
-    });
-
-    // instead of
-    module.exports = Customer;
-
-    // just do
-    module.exports = Bookshelf.model('Customer', Customer);
-    </pre>
-
-    <p id="Registry-collection">
-      <b class="header">collection</b><code>Bookshelf.collection(name, [Collection])</code>
-      <br />
-
-      Identical semantics to <a href="#Registry-model">model</a>. If a
-      <tt>Collection</tt> is supplied, Bookshelf will register it using the
-      <tt>name</tt>. Otherwise, Bookshelf will look for a previously
-      registered collection.
-
-    </p>
-
 
     <h2 id="Model">Bookshelf.Model</h2>
 
@@ -2238,6 +2167,18 @@ Bookshelf.transaction(function(t) {
 
   });
 </pre>
+
+    <h2 id="Plugins">Plugins</h2>
+
+    <ul>
+      <li id="Plugin-Registry">
+        <b><a href="https://github.com/tgriesser/bookshelf/wiki/Plugin:-Model-Registry">Registry</a>:</b>
+
+        Register models in a central location so that you can refer to them using
+        a string in relations instead of having to require it every time. Helps
+        deal with the challenges of circular module dependencies in Node.
+      </li>
+    </ul>
 
     <h2 id="faq">F.A.Q.</h2>
 
