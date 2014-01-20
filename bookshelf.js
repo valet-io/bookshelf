@@ -98,17 +98,29 @@ _.extend(Bookshelf.prototype, Events, {
     return this;
   },
 
-  // Provides the ability to register models on the Bookshelf instance to
-  // avoid circular dependency issues
+  // Provides the ability to register models and collections on the Bookshelf
+  // instance to avoid circular dependency issues
 
   model: function(Model, name) {
     if (typeof Model === 'string') {
       name = Model;
     } else {
+      this._models = this._models || {};
       this._models[name] = Model;
     }
 
     return this._models[name];
+  },
+
+  collection: function(Collection, name) {
+    if (typeof Collection === 'string') {
+      name = Collection;
+    } else {
+      this._collections = this._collections || {};
+      this._collections[name] = Collection;
+    }
+
+    return this._collections[name];
   }
 
 });

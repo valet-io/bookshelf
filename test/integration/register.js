@@ -32,6 +32,29 @@ module.exports = function(Bookshelf) {
 
 		});
 
+		describe('Registering Collections', function() {
+
+			var Collection = Bookshelf.Collection.extend({
+				property: {}
+			});
+
+			it('returns the registered collection', function() {
+				equal(Bookshelf.collection(Collection), Collection);
+			});
+
+			it('gives the collection a name', function() {
+				Bookshelf.collection(Collection, 'CollectionName');
+				equal(Bookshelf.collection('CollectionName'), Collection);
+			});
+
+			it('overwrites the collection when there is a name conflict', function() {
+				Bookshelf.collection(Collection, 'Name');
+				Bookshelf.collection(Bookshelf.Collection, 'Name');
+				equal(Bookshelf.collection('Name'), Bookshelf.Collection);
+			});
+
+		});
+
 	});
 
 };
